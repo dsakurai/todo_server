@@ -35,48 +35,50 @@ Future<void> insertRecord(Database db, StoreRef<int, Map<String, Object?>> store
   print('Inserted record with key: $key');
 }
 
-void main(List<String> args) async {
-
-  final db = await initDatabase();
-
-  try {
-    final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
-    insertRecord(db, store);
-  } finally {
-    await db.close();
-  }
+Future<(InternetAddress,HttpServer)> startServer() async {
 
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = InternetAddress.anyIPv4;
+  HttpServer? server;
+
+  // For running in containers, we respect the PORT environment variable.
+  var port = int.parse(Platform.environment['PORT'] ?? '8080');
 
   // Configure a pipeline that logs requests.
   final handler =
       Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
 
-  // For running in containers, we respect the PORT environment variable.
-  var port = int.parse(Platform.environment['PORT'] ?? '8080');
-  int attempt = 0;
+  try {
+    server = await serve(handler, ip, port);
+  } on SocketException catch (e) {
 
-  final attempt_max = 10;
-
-  HttpServer? server = null;
-
-  while ( attempt < attempt_max ) {
-    try {
-      server = await serve(handler, ip, port);
-      break;
-    } on SocketException catch (e) {
-      port++;
-      attempt++;
-
-      if (attempt == attempt_max) {
-        print("Unable to bind to a port after $attempt_max attempts.");
-        exit(1);
-      }
-    }
+    print("Unable to bind to the port.");
+    rethrow;
   }
-
+  
   if (server != null) {
     print('Server listening on port ${server.port}');
+    return (ip, server);
   }
+
+  throw Exception("Failed to start server.");
+}
+
+void main(List<String> args) async {
+
+  final db = await initDatabase();
+
+  try {
+
+    final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
+    insertRecord(db, store);
+
+    // Configure a pipeline that logs requests.
+    await startServer();
+
+  } finally {
+    await db.close();
+  }
+
+
 }
