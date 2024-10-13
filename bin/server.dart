@@ -38,11 +38,13 @@ Future<void> insertRecord(Database db, StoreRef<int, Map<String, Object?>> store
 void main(List<String> args) async {
 
   final db = await initDatabase();
-  final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
 
-  insertRecord(db, store);
-
-  await db.close();
+  try {
+    final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
+    insertRecord(db, store);
+  } finally {
+    await db.close();
+  }
 
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = InternetAddress.anyIPv4;
