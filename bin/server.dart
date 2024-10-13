@@ -1,5 +1,10 @@
 import 'dart:io';
 
+import 'package:sembast/sembast.dart';
+import 'package:sembast/sembast_io.dart';
+
+import 'package:path/path.dart';
+
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
@@ -18,7 +23,28 @@ Response _echoHandler(Request request) {
   return Response.ok('$message\n');
 }
 
+Future<Database> initDatabase() async {
+  final directory = Directory.current;
+  final dbPath = join(directory.path, 'todo_list.json');
+  final database = await databaseFactoryIo.openDatabase(dbPath);
+  return database;
+}
+
+Future<void> insertRecord(Database db, StoreRef<int, Map<String, Object?>> store) async {
+  final key = await store.add(db, {'name': 'Alice', 'age': 30});
+  print('Inserted record with key: $key');
+}
+
 void main(List<String> args) async {
+
+  final db = await initDatabase();
+  final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
+
+  insertRecord(db, store);
+  insertRecord(db, store);
+
+  await db.close();
+
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = InternetAddress.anyIPv4;
 
@@ -50,6 +76,6 @@ void main(List<String> args) async {
   }
 
   if (server != null) {
-  print('Server listening on port ${server.port}');
+    print('Server listening on port ${server.port}');
   }
 }
