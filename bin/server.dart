@@ -27,7 +27,29 @@ void main(List<String> args) async {
       Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
 
   // For running in containers, we respect the PORT environment variable.
-  final port = int.parse(Platform.environment['PORT'] ?? '8080');
-  final server = await serve(handler, ip, port);
+  var port = int.parse(Platform.environment['PORT'] ?? '8080');
+  int attempt = 0;
+
+  final attempt_max = 10;
+
+  HttpServer? server = null;
+
+  while ( attempt < attempt_max ) {
+    try {
+      server = await serve(handler, ip, port);
+      break;
+    } on SocketException catch (e) {
+      port++;
+      attempt++;
+
+      if (attempt == attempt_max) {
+        print("Unable to bind to a port after $attempt_max attempts.");
+        exit(1);
+      }
+    }
+  }
+
+  if (server != null) {
   print('Server listening on port ${server.port}');
+  }
 }
