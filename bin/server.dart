@@ -31,7 +31,7 @@ Future<Database> initDatabase() async {
 }
 
 Future<void> insertRecord(Database db, StoreRef<int, Map<String, Object?>> store) async {
-  final key = await store.add(db, {'name': 'Alice', 'age': 30});
+  final key = await store.add(db, {'task_item': 'Buy milk', 'tag': 'NOW', 'project': 'Inbox'});
   print('Inserted record with key: $key');
 }
 
@@ -40,7 +40,6 @@ void main(List<String> args) async {
   final db = await initDatabase();
   final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
 
-  insertRecord(db, store);
   insertRecord(db, store);
 
   await db.close();
