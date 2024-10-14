@@ -77,22 +77,18 @@ class Todo_item {
 }
 
 class Todo_value {
-  // hash -> json value
-  Map<String, Object?> value;
 
-  set text (String str) {
-    value["text"] = str;
-  }
+  String text;
 
-  String get text {
-    return value["text"] as String;
+  Map<String, Object?> to_map() {
+    return {
+      "text": text
+    };
   }
 
   Todo_value(
-    {String text = ""}
-  ): value = {} {
-    this.text = text;
-  }
+    {this.text = ""}
+  );
 }
 
 class Todo_list {
@@ -101,7 +97,7 @@ class Todo_list {
   final StoreRef<String, Map<String, Object?>> _store = stringMapStoreFactory.store('todo_list');
 
   Future<String> add(Todo_value item) async {
-    return _store.add(database, item.value);
+    return _store.add(database, item.to_map());
   }
 
   Future<String> jsonEncode() async {
