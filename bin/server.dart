@@ -76,18 +76,28 @@ class Todo_item {
   );
 }
 
+enum GTD_tag {
+  NOW,
+}
+
 class Todo_value {
 
   String text;
+  GTD_tag category;
+  String project;
 
   Map<String, Object?> to_map() {
     return {
-      "text": text
+      "text":     text,
+      "project":  project
     };
   }
 
   Todo_value(
-    {this.text = ""}
+    {this.text = "",
+     this.category = GTD_tag.NOW,
+     this.project = ""
+    }
   );
 }
 
