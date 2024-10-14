@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert' as convert;
 import 'dart:io';
 
 import 'package:sembast/sembast_io.dart';
@@ -64,27 +64,73 @@ Future<(InternetAddress,HttpServer)> startServer() async {
   throw Exception("Failed to start server.");
 }
 
+class Todo_item {
+  Todo_value value;
+  String hash;
+
+  Todo_item(
+    {
+      required this.value,
+      required this.hash
+    }
+  );
+}
+
+class Todo_value {
+  // hash -> json value
+  Map<String, Object?> value;
+
+  set text (String str) {
+    value["text"] = str;
+  }
+
+  String get text {
+    return value["text"] as String;
+  }
+
+  Todo_value(
+    {String text = ""}
+  ): value = {} {
+    this.text = text;
+  }
+}
+
+class Todo_list {
+
+  final Database database;
+  final StoreRef<String, Map<String, Object?>> _store = stringMapStoreFactory.store('todo_list');
+
+  Future<String> add(Todo_value item) async {
+    return _store.add(database, item.value);
+  }
+
+  Future<String> jsonEncode() async {
+    final records = await _store.find(database);
+
+    final jsonData = {
+      for (var record in records) record.key.toString(): record.value
+    };
+
+    return convert.jsonEncode(jsonData);
+  }
+
+  Todo_list ({
+    required this.database
+  });
+
+}
+
 void main(List<String> args) async {
 
   final db = await initDatabase();
 
   try {
 
-    final StoreRef<String, Map<String, Object?>> store = stringMapStoreFactory.store('todo_list');
-    await insertRecord(db, store);
-
-    final StoreRef<String, Map<String, Object?>> store2 = stringMapStoreFactory.store('dummy');
-    await insertRecord(db, store2);
+    final todo_list = Todo_list(database: db);
+    await todo_list.add(Todo_value(text: "Buy milk."));
 
     // Get all data
-    final records = await store.find(db);
-
-    final jsonData = {
-      for (var record in records) record.key.toString(): record.value
-    };
-
-    final str = jsonEncode(jsonData);
-
+    final str = await todo_list.jsonEncode();
     print(str);
 
     // Configure a pipeline that logs requests.
