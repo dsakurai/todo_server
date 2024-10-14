@@ -77,26 +77,34 @@ class Todo_item {
 }
 
 enum GTD_tag {
-  NOW,
+  Now ('Now');
+
+  final String name;
+
+  const GTD_tag(this.name);
 }
 
 class Todo_value {
 
   String text;
-  GTD_tag category;
+  GTD_tag gtd_tag;
   String project;
+  String group; // Used for creating, e.g., a "Private" group
 
   Map<String, Object?> to_map() {
     return {
       "text":     text,
-      "project":  project
+      "gtd_tag": gtd_tag.name,
+      "project":  project,
+      "group": group
     };
   }
 
   Todo_value(
     {this.text = "",
-     this.category = GTD_tag.NOW,
-     this.project = ""
+     this.gtd_tag = GTD_tag.Now,
+     this.project = "",
+     this.group   = ""
     }
   );
 }
