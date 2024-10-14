@@ -77,11 +77,11 @@ class Todo_item {
 }
 
 enum GTD_tag {
-  Now ('Now');
-
-  final String name;
-
-  const GTD_tag(this.name);
+  Now,
+  Waiting,
+  Someday,
+  Context,
+  Reference
 }
 
 class Todo_value {
@@ -93,10 +93,10 @@ class Todo_value {
 
   Map<String, Object?> to_map() {
     return {
-      "text":     text,
+      "text":    text,
       "gtd_tag": gtd_tag.name,
-      "project":  project,
-      "group": group
+      "project": project,
+      "group":   group
     };
   }
 
