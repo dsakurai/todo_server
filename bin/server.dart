@@ -84,27 +84,43 @@ enum GTD_tag {
   Reference
 }
 
-class Todo_value {
-
+class Task {
   String text;
   GTD_tag gtd_tag;
-  String project;
-  String group; // Used for creating, e.g., a "Private" group
 
   Map<String, Object?> to_map() {
     return {
-      "text":    text,
-      "gtd_tag": gtd_tag.name,
+      "text" : text,
+      "gtd_tag": gtd_tag.name
+    };
+  }
+
+  Task (
+    {this.text    = "",
+     this.gtd_tag = GTD_tag.Now
+    }
+  );
+}
+
+class Todo_value {
+
+  String group; // Used for creating, e.g., a "Private" group
+  String project;
+  Task? task;
+
+  Map<String, Object?> to_map() {
+    return {
+      "group":   group,
       "project": project,
-      "group":   group
+      "task": task?.to_map(),
     };
   }
 
   Todo_value(
-    {this.text = "",
-     this.gtd_tag = GTD_tag.Now,
-     this.project = "",
-     this.group   = ""
+    {
+      this.group   = "",
+      this.project = "",
+      this.task,
     }
   );
 }
@@ -141,7 +157,14 @@ void main(List<String> args) async {
   try {
 
     final todo_list = Todo_list(database: db);
-    await todo_list.add(Todo_value(text: "Buy milk."));
+    await todo_list.add(Todo_value(
+                          task: Task(text:"Buy milk."),
+                          project: "Grocery store"));
+    await todo_list.add(Todo_value(
+                          group:   "Private",
+                          project: "Watch movie")); // A project without a task; used to save a project even if it's empty.
+    await todo_list.add(Todo_value(
+                          project: "Homework")); // A project without a task; used to save a project even if it's empty.
 
     // Get all data
     final str = await todo_list.jsonEncode();
