@@ -161,6 +161,8 @@ void main(List<String> args) async {
                           task: Task(text:"Buy milk."),
                           project: "Grocery store"));
     await todo_list.add(Todo_value(
+                          group:   "Friends only")); // A project without a task; used to save a project even if it's empty.
+    await todo_list.add(Todo_value(
                           group:   "Private",
                           project: "Watch movie")); // A project without a task; used to save a project even if it's empty.
     await todo_list.add(Todo_value(
