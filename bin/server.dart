@@ -112,7 +112,7 @@ class Todo_value {
     return {
       "group":   group,
       "project": project,
-      "task": task?.to_map(),
+      "task":    task?.to_map(),
     };
   }
 
