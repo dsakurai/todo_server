@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:sembast/sembast_io.dart';
@@ -29,7 +30,7 @@ Future<Database> initDatabase() async {
   return database;
 }
 
-Future<void> insertRecord(Database db, StoreRef<int, Map<String, Object?>> store) async {
+Future<void> insertRecord(Database db, StoreRef<String, Map<String, Object?>> store) async {
   final key = await store.add(db, {'task_item': 'Buy milk', 'tag': 'NOW', 'project': 'Inbox'});
   print('Inserted record with key: $key');
 }
@@ -69,8 +70,22 @@ void main(List<String> args) async {
 
   try {
 
-    final StoreRef<int, Map<String, Object?>> store = intMapStoreFactory.store('todo_list');
-    insertRecord(db, store);
+    final StoreRef<String, Map<String, Object?>> store = stringMapStoreFactory.store('todo_list');
+    await insertRecord(db, store);
+
+    final StoreRef<String, Map<String, Object?>> store2 = stringMapStoreFactory.store('dummy');
+    await insertRecord(db, store2);
+
+    // Get all data
+    final records = await store.find(db);
+
+    final jsonData = {
+      for (var record in records) record.key.toString(): record.value
+    };
+
+    final str = jsonEncode(jsonData);
+
+    print(str);
 
     // Configure a pipeline that logs requests.
     await startServer();
