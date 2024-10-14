@@ -106,7 +106,7 @@ class Todo_value {
 
   String group; // Used for creating, e.g., a "Private" group
   String project;
-  Task? task;
+  final Task? task; // null means that this is a database store to save just a group or project name.
 
   Map<String, Object?> to_map() {
     return {
