@@ -1,5 +1,7 @@
 import 'package:todo_core/todo_core.dart';
 
+import 'package:uuid/uuid.dart';
+
 import 'dart:io';
 
 import 'package:sembast/sembast_io.dart';
@@ -99,9 +101,9 @@ void main(List<String> args) async {
   try {
 
     final todo_data = Todo_list(database: db);
-    await todo_data.add(Todo_node( text:"Buy milk."));
-    await todo_data.add(Todo_node( text: "Watch movie")); // A project without a task; used to save a project even if it's empty.
-    await todo_data.add(Todo_node( text: "Homework")); // A project without a task; used to save a project even if it's empty.
+    await todo_data.add(Todo_node( text:"Buy milk.",    node_id: Uuid().v4()));
+    await todo_data.add(Todo_node( text: "Watch movie", node_id: Uuid().v4())); // A project without a task; used to save a project even if it's empty.
+    await todo_data.add(Todo_node( text: "Homework",    node_id: Uuid().v4())); // A project without a task; used to save a project even if it's empty.
 
     // Get all data
     final str = await todo_data.jsonEncode();
