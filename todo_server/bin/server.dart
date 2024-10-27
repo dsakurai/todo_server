@@ -17,7 +17,7 @@ class Todo_list {
   final Database database;
   final StoreRef<String, Map<String, Object?>> _store = stringMapStoreFactory.store('todo_list');
 
-  Future<String> add(Todo_value item) async {
+  Future<String> add(Todo_node item) async {
     return _store.add(database, item.to_map());
   }
 
@@ -99,15 +99,15 @@ void main(List<String> args) async {
   try {
 
     final todo_list = Todo_list(database: db);
-    await todo_list.add(Todo_value(
+    await todo_list.add(Todo_node(
                           task: Task(text:"Buy milk."),
                           project: "Grocery store"));
-    await todo_list.add(Todo_value(
+    await todo_list.add(Todo_node(
                           group:   "Friends only")); // A project without a task; used to save a project even if it's empty.
-    await todo_list.add(Todo_value(
+    await todo_list.add(Todo_node(
                           group:   "Private",
                           project: "Watch movie")); // A project without a task; used to save a project even if it's empty.
-    await todo_list.add(Todo_value(
+    await todo_list.add(Todo_node(
                           project: "Homework")); // A project without a task; used to save a project even if it's empty.
 
     // Get all data

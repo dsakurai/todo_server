@@ -28,7 +28,7 @@ class Task {
   );
 }
 
-class Todo_value {
+class Todo_node {
 
   String group; // Used for creating, e.g., a "Private" group
   String project;
@@ -42,7 +42,7 @@ class Todo_value {
     };
   }
 
-  Todo_value(
+  Todo_node(
     {
       this.group   = "",
       this.project = "",
