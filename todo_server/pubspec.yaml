@@ -7,6 +7,8 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  todo_core:
+    path: "../todo_core"
   args: ^2.4.0
   path: ^1.9.0
   sembast: ^3.7.5
