@@ -98,20 +98,13 @@ void main(List<String> args) async {
 
   try {
 
-    final todo_list = Todo_list(database: db);
-    await todo_list.add(Todo_node(
-                          task: Task(text:"Buy milk."),
-                          project: "Grocery store"));
-    await todo_list.add(Todo_node(
-                          group:   "Friends only")); // A project without a task; used to save a project even if it's empty.
-    await todo_list.add(Todo_node(
-                          group:   "Private",
-                          project: "Watch movie")); // A project without a task; used to save a project even if it's empty.
-    await todo_list.add(Todo_node(
-                          project: "Homework")); // A project without a task; used to save a project even if it's empty.
+    final todo_data = Todo_list(database: db);
+    await todo_data.add(Todo_node( text:"Buy milk."));
+    await todo_data.add(Todo_node( text: "Watch movie")); // A project without a task; used to save a project even if it's empty.
+    await todo_data.add(Todo_node( text: "Homework")); // A project without a task; used to save a project even if it's empty.
 
     // Get all data
-    final str = await todo_list.jsonEncode();
+    final str = await todo_data.jsonEncode();
     print(str);
 
     // Configure a pipeline that logs requests.
