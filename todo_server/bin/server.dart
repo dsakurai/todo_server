@@ -64,18 +64,6 @@ Future<(InternetAddress,HttpServer)> startServer() async {
   throw Exception("Failed to start server.");
 }
 
-class Todo_item {
-  Todo_value value;
-  String hash;
-
-  Todo_item(
-    {
-      required this.value,
-      required this.hash
-    }
-  );
-}
-
 enum GTD_tag {
   Now,
   Waiting,
