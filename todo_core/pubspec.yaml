@@ -8,6 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  sembast: ^3.7.5
   # path: ^1.8.0
 
 dev_dependencies:
