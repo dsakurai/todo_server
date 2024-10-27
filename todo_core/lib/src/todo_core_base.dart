@@ -7,9 +7,13 @@ class Todo_node {
   String text;
   final String node_id;
 
+  List<String> child_node_ids() {
+    return [ for (var child in children) child.node_id ];
+  }
+
   Map<String, Object?> to_map() {
     return {
-      "children":  children,
+      "children":  child_node_ids(),
       "text":    text,
       "hash": node_id,
     };

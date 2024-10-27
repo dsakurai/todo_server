@@ -101,8 +101,11 @@ void main(List<String> args) async {
   try {
 
     final todo_data = Todo_list(database: db);
-    await todo_data.add(Todo_node( text:"Buy milk.",    node_id: Uuid().v4()));
-    await todo_data.add(Todo_node( text: "Watch movie", node_id: Uuid().v4())); // A project without a task; used to save a project even if it's empty.
+
+    final child = Todo_node( text:"Buy milk.",    node_id: Uuid().v4());
+
+    await todo_data.add(child);
+    await todo_data.add(Todo_node( text: "Watch movie", node_id: Uuid().v4(), children: [child])); // A project without a task; used to save a project even if it's empty.
     await todo_data.add(Todo_node( text: "Homework",    node_id: Uuid().v4())); // A project without a task; used to save a project even if it's empty.
 
     // Get all data
