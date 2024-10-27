@@ -1,5 +1,3 @@
-import 'dart:convert' as convert;
-import 'package:sembast/sembast_io.dart';
 
 // Put public facing types in this file.
 
@@ -51,29 +49,4 @@ class Todo_value {
       this.task,
     }
   );
-}
-
-class Todo_list {
-
-  final Database database;
-  final StoreRef<String, Map<String, Object?>> _store = stringMapStoreFactory.store('todo_list');
-
-  Future<String> add(Todo_value item) async {
-    return _store.add(database, item.to_map());
-  }
-
-  Future<String> jsonEncode() async {
-    final records = await _store.find(database);
-
-    final jsonData = {
-      for (var record in records) record.key.toString(): record.value
-    };
-
-    return convert.jsonEncode(jsonData);
-  }
-
-  Todo_list ({
-    required this.database
-  });
-
 }

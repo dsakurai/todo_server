@@ -239,7 +239,7 @@ packages:
     source: hosted
     version: "2.1.4"
   sembast:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: sembast
       sha256: dc42f8384edc2bc0c11c90856fa62630ad2a75d8a37c786e000517bd8298682d
